@@ -26,3 +26,9 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/Trminh06-work/MOpt"
 Issues = "https://github.com/Trminh06-work/MOpt/issues"
+
+[dependency-groups]
+dev = [
+  "pytest",
+  "scipy",
+]
