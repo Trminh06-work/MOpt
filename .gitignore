@@ -1,0 +1,8 @@
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+*.egg-info/
