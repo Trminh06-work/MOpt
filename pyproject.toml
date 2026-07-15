@@ -23,6 +23,9 @@ dependencies = [
   "numpy>=1.24",
 ]
 
+[project.optional-dependencies]
+torch = ["torch"]
+
 [project.urls]
 Homepage = "https://github.com/Trminh06-work/MOpt"
 Issues = "https://github.com/Trminh06-work/MOpt/issues"
