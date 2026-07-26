@@ -12,6 +12,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # full history required for hatch-vcs to see the tags
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
