@@ -1,36 +1,82 @@
-"""Nonlinear programming problems and solvers."""
+"""Nonlinear programming problems and solvers.
 
-from mopt.nonlinear.conjugate_grad_method import (
+Problem descriptions, the shared line searches and the differentiation
+helpers live here; the solvers are split by what they optimize over —
+:mod:`~mopt.nonlinear.unconstrained` and
+:mod:`~mopt.nonlinear.constrained`. Everything is re-exported at this
+level, so ``from mopt.nonlinear import Newton, ProjectedGradient`` works
+regardless of which subpackage a solver lives in.
+"""
+
+from mopt.nonlinear.constrained import (
+    FrankWolfe,
+    KKTResidual,
+    LinearOracle,
+    ProjectedGradient,
+    Projection,
+    affine_projection,
+    ellipsoid_oracle,
+    ellipsoid_projection,
+    frank_wolfe_gap,
+    halfspace_projection,
+    intersection_projection,
+    kkt_residual,
+    lagrangian,
+    projected_gradient_residual,
+)
+from mopt.nonlinear.finite_diff import (
+    finite_difference_gradient,
+    finite_difference_jacobian,
+)
+from mopt.nonlinear.line_search import LineSearch, armijo, wolfe
+from mopt.nonlinear.problem import ConstrainedNLPProblem, NLPProblem
+from mopt.nonlinear.unconstrained import (
     ArmijoModifiedCG,
     BetaRule,
     ConjugateGradient,
+    GradientDescent,
+    Newton,
     QuadraticCG,
+    TrustRegion,
+    TrustRegionMethod,
+    cauchy,
+    dogleg,
     fletcher_reeves,
     polak_ribiere,
 )
-from mopt.nonlinear.finite_diff import finite_difference_gradient
-from mopt.nonlinear.gradient_descent import GradientDescent
-from mopt.nonlinear.line_search import LineSearch, armijo, wolfe
-from mopt.nonlinear.newton import Newton
-from mopt.nonlinear.problem import NLPProblem
-from mopt.nonlinear.trust_region import TrustRegion, TrustRegionMethod, cauchy, dogleg
 
 __all__ = [
     "ArmijoModifiedCG",
     "BetaRule",
     "ConjugateGradient",
+    "ConstrainedNLPProblem",
+    "FrankWolfe",
     "GradientDescent",
+    "KKTResidual",
     "LineSearch",
+    "LinearOracle",
     "NLPProblem",
     "Newton",
+    "ProjectedGradient",
+    "Projection",
     "QuadraticCG",
     "TrustRegion",
     "TrustRegionMethod",
+    "affine_projection",
     "armijo",
     "cauchy",
     "dogleg",
+    "ellipsoid_oracle",
+    "ellipsoid_projection",
     "finite_difference_gradient",
+    "finite_difference_jacobian",
     "fletcher_reeves",
+    "frank_wolfe_gap",
+    "halfspace_projection",
+    "intersection_projection",
+    "kkt_residual",
+    "lagrangian",
     "polak_ribiere",
+    "projected_gradient_residual",
     "wolfe",
 ]
