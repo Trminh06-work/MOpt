@@ -6,4 +6,7 @@ __pycache__/
 .venv/
 dist/
 *.egg-info/
-labs/
+my_labs/
+
+# macOS
+.DS_Store
