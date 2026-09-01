@@ -1,10 +1,5 @@
 # Examples
 
-Runnable examples using MOpt's solvers, written the way an installed user would
-use them (`from mopt.nonlinear import ...`).
-
-Run them against the package, not a local copy of the algorithms:
-
-```bash
-pip install -e ".[torch]" --group dev
-```
+Examples that use MOpt the way an installed user would
+(`from mopt.nonlinear import ...`), rather than carrying their own copy of
+the algorithms.
