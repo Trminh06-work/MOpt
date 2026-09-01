@@ -17,6 +17,13 @@ from mopt.nonlinear.constrained.optimality import (
     lagrangian,
     projected_gradient_residual,
 )
+from mopt.nonlinear.constrained.penalty import (
+    PenaltyBarrierMethod,
+    PenaltyMethod,
+    barrier_merit,
+    constraint_violation,
+    penalty_merit,
+)
 from mopt.nonlinear.constrained.projected_gradient import (
     FrankWolfe,
     LinearOracle,
@@ -28,14 +35,21 @@ from mopt.nonlinear.constrained.projected_gradient import (
     halfspace_projection,
     intersection_projection,
 )
+from mopt.nonlinear.constrained.sqp import SQP, damped_bfgs
 
 __all__ = [
+    "SQP",
     "FrankWolfe",
     "KKTResidual",
     "LinearOracle",
+    "PenaltyBarrierMethod",
+    "PenaltyMethod",
     "ProjectedGradient",
     "Projection",
     "affine_projection",
+    "barrier_merit",
+    "constraint_violation",
+    "damped_bfgs",
     "ellipsoid_oracle",
     "ellipsoid_projection",
     "frank_wolfe_gap",
@@ -43,5 +57,6 @@ __all__ = [
     "intersection_projection",
     "kkt_residual",
     "lagrangian",
+    "penalty_merit",
     "projected_gradient_residual",
 ]

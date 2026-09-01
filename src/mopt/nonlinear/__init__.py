@@ -9,12 +9,18 @@ regardless of which subpackage a solver lives in.
 """
 
 from mopt.nonlinear.constrained import (
+    SQP,
     FrankWolfe,
     KKTResidual,
     LinearOracle,
+    PenaltyBarrierMethod,
+    PenaltyMethod,
     ProjectedGradient,
     Projection,
     affine_projection,
+    barrier_merit,
+    constraint_violation,
+    damped_bfgs,
     ellipsoid_oracle,
     ellipsoid_projection,
     frank_wolfe_gap,
@@ -22,6 +28,7 @@ from mopt.nonlinear.constrained import (
     intersection_projection,
     kkt_residual,
     lagrangian,
+    penalty_merit,
     projected_gradient_residual,
 )
 from mopt.nonlinear.finite_diff import (
@@ -55,6 +62,7 @@ from mopt.nonlinear.unconstrained import (
 )
 
 __all__ = [
+    "SQP",
     "ArmijoModifiedCG",
     "BetaRule",
     "ConjugateGradient",
@@ -66,6 +74,8 @@ __all__ = [
     "LinearOracle",
     "NLPProblem",
     "Newton",
+    "PenaltyBarrierMethod",
+    "PenaltyMethod",
     "ProjectedGradient",
     "Projection",
     "QuadraticCG",
@@ -75,9 +85,12 @@ __all__ = [
     "TrustRegionMethod",
     "affine_projection",
     "armijo",
+    "barrier_merit",
     "bfgs",
     "bracketing_wolfe",
     "cauchy",
+    "constraint_violation",
+    "damped_bfgs",
     "dfp",
     "dogleg",
     "ellipsoid_oracle",
@@ -90,6 +103,7 @@ __all__ = [
     "intersection_projection",
     "kkt_residual",
     "lagrangian",
+    "penalty_merit",
     "polak_ribiere",
     "projected_gradient_residual",
     "wolfe",
