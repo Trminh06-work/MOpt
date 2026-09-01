@@ -28,7 +28,12 @@ from mopt.nonlinear.finite_diff import (
     finite_difference_gradient,
     finite_difference_jacobian,
 )
-from mopt.nonlinear.line_search import LineSearch, armijo, wolfe
+from mopt.nonlinear.line_search import (
+    LineSearch,
+    armijo,
+    bracketing_wolfe,
+    wolfe,
+)
 from mopt.nonlinear.problem import ConstrainedNLPProblem, NLPProblem
 from mopt.nonlinear.unconstrained import (
     ArmijoModifiedCG,
@@ -37,9 +42,13 @@ from mopt.nonlinear.unconstrained import (
     GradientDescent,
     Newton,
     QuadraticCG,
+    QuasiNewton,
+    QuasiNewtonUpdate,
     TrustRegion,
     TrustRegionMethod,
+    bfgs,
     cauchy,
+    dfp,
     dogleg,
     fletcher_reeves,
     polak_ribiere,
@@ -60,11 +69,16 @@ __all__ = [
     "ProjectedGradient",
     "Projection",
     "QuadraticCG",
+    "QuasiNewton",
+    "QuasiNewtonUpdate",
     "TrustRegion",
     "TrustRegionMethod",
     "affine_projection",
     "armijo",
+    "bfgs",
+    "bracketing_wolfe",
     "cauchy",
+    "dfp",
     "dogleg",
     "ellipsoid_oracle",
     "ellipsoid_projection",

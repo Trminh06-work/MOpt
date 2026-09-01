@@ -222,3 +222,125 @@ def wolfe(
         eta *= delta
         num_iter += 1
     return num_iter, eta
+
+
+def bracketing_wolfe(
+    f: Callable,
+    x: np.ndarray,
+    d: np.ndarray,
+    grad_f: Callable | None = None,
+    eta: float = 1.0,
+    eta_max: float = 1e10,
+    gamma: float = 1e-4,
+    sigma: float = 0.9,
+    max_iter: int = 100,
+) -> tuple[int, float]:
+    """Strong Wolfe line search that brackets, then zooms.
+
+    Unlike :func:`armijo` and :func:`wolfe`, which only ever *shrink* the
+    trial step, this search grows it as well: it doubles ``eta`` until it
+    straddles an acceptable step, then bisects the resulting bracket. That
+    matters whenever the acceptable window lies above the initial trial —
+    a shrink-only search can never reach it and fails outright, however
+    fine its shrink factor.
+
+    Quasi-Newton directions need exactly this. Their natural step is
+    :math:`\\eta = 1`, but only once ``H`` approximates the inverse
+    Hessian; before then, and on curved valleys, the window routinely sits
+    above 1. Nocedal & Wright, Algorithms 3.5 and 3.6.
+
+    Parameters
+    ----------
+    f : callable
+        Objective ``f(x) -> float``.
+    x : np.ndarray, shape (n,)
+        Current point.
+    d : np.ndarray, shape (n,)
+        Descent direction; must satisfy ``grad_f(x) @ d < 0``.
+    grad_f : callable, optional
+        Gradient ``grad_f(x) -> np.ndarray`` of shape (n,). When None,
+        central finite differences of ``f`` are used.
+    eta : float
+        First trial step. Kept at 1.0 for Newton and quasi-Newton
+        directions, where the unit step is the asymptotically right one.
+    eta_max : float
+        Ceiling on the bracketing phase.
+    gamma : float
+        Sufficient-decrease constant, in (0, ``sigma``).
+    sigma : float
+        Curvature constant, in (``gamma``, 1). The 0.9 default is the
+        value Nocedal & Wright prescribe for Newton and quasi-Newton
+        directions; the tighter values used for conjugate gradients demand
+        a near-exact minimizer of every line.
+    max_iter : int
+        Maximum trial steps across both phases.
+
+    Returns
+    -------
+    num_iter : int
+        Number of trial steps evaluated.
+    eta : float
+        The accepted step size.
+
+    Raises
+    ------
+    ValueError
+        If the constants are out of range, or ``d`` is not a descent
+        direction at ``x``.
+    RuntimeError
+        If no acceptable step is found within ``max_iter`` trials.
+    """
+    if not 0 < gamma < sigma < 1:
+        raise ValueError("need 0 < gamma < sigma < 1.")
+    if grad_f is None:
+        grad_f = partial(finite_difference_gradient, f)
+
+    phi_0 = f(x)
+    slope_0 = np.dot(grad_f(x), d)
+    if slope_0 >= 0:
+        raise ValueError("d is not a descent direction: grad_f(x) @ d >= 0")
+
+    def phi(step: float) -> float:
+        return f(x + step * d)
+
+    def slope(step: float) -> float:
+        return float(np.dot(grad_f(x + step * d), d))
+
+    def zoom(lo: float, hi: float, phi_lo: float, budget: int) -> tuple[int, float]:
+        # invariant: [lo, hi] contains a step meeting both conditions, with
+        # lo the better endpoint; bisect until one is found
+        for used in range(1, budget + 1):
+            mid = 0.5 * (lo + hi)
+            phi_mid = phi(mid)
+            if phi_mid > phi_0 + gamma * mid * slope_0 or phi_mid >= phi_lo:
+                hi = mid
+            else:
+                slope_mid = slope(mid)
+                if abs(slope_mid) <= -sigma * slope_0:
+                    return used, mid
+                if slope_mid * (hi - lo) >= 0:
+                    hi = lo
+                lo, phi_lo = mid, phi_mid
+        raise RuntimeError(
+            f"bracketing_wolfe: no acceptable step within {max_iter} trials"
+        )
+
+    eta_prev, phi_prev = 0.0, phi_0
+    for num_iter in range(1, max_iter + 1):
+        phi_eta = phi(eta)
+        if phi_eta > phi_0 + gamma * eta * slope_0 or (
+            num_iter > 1 and phi_eta >= phi_prev
+        ):
+            used, step = zoom(eta_prev, eta, phi_prev, max_iter - num_iter)
+            return num_iter + used, step
+        slope_eta = slope(eta)
+        if abs(slope_eta) <= -sigma * slope_0:
+            return num_iter, eta
+        if slope_eta >= 0:
+            used, step = zoom(eta, eta_prev, phi_eta, max_iter - num_iter)
+            return num_iter + used, step
+        eta_prev, phi_prev = eta, phi_eta
+        eta = min(2.0 * eta, eta_max)
+    raise RuntimeError(
+        f"bracketing_wolfe: no acceptable step within {max_iter} trials"
+    )

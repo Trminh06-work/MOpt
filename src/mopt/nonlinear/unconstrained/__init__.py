@@ -17,6 +17,12 @@ from mopt.nonlinear.unconstrained.conjugate_grad_method import (
 )
 from mopt.nonlinear.unconstrained.gradient_descent import GradientDescent
 from mopt.nonlinear.unconstrained.newton import Newton
+from mopt.nonlinear.unconstrained.quasi_newton import (
+    QuasiNewton,
+    QuasiNewtonUpdate,
+    bfgs,
+    dfp,
+)
 from mopt.nonlinear.unconstrained.trust_region import (
     TrustRegion,
     TrustRegionMethod,
@@ -31,9 +37,13 @@ __all__ = [
     "GradientDescent",
     "Newton",
     "QuadraticCG",
+    "QuasiNewton",
+    "QuasiNewtonUpdate",
     "TrustRegion",
     "TrustRegionMethod",
+    "bfgs",
     "cauchy",
+    "dfp",
     "dogleg",
     "fletcher_reeves",
     "polak_ribiere",
