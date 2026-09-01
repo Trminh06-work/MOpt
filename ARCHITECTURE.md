@@ -89,12 +89,8 @@ NumPy is the only runtime dependency. PyTorch is an optional extra
 of the package works without it. SciPy is test-only, used to cross-check
 solvers against a trusted implementation.
 
-## labs/ and my_labs/
+## labs/
 
 `labs/` holds runnable examples that use the package the way an installed user
-would.
+would. Not part of the package.
 
-`my_labs/` is the prototyping ground: notebooks where each method is worked out
-and checked by hand before being ported to `src/`. It is gitignored.
-
-Neither is part of the package.
